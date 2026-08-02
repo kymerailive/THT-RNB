@@ -142,7 +142,8 @@ font-weight:800;cursor:pointer;font:inherit;box-shadow:0 4px 14px rgba(124,92,25
 .fc-msg.err{color:#e79a9a}
 
 /* ---- forming a squad from the muster ---- */
-.mkrow{margin-top:16px}
+.mkrow{margin:0 0 20px;padding:12px;border-radius:12px;background:#0d1420;
+  border:1px solid #1e2c40}
 .mkrow input{padding:8px 11px;border-radius:9px;background:#0d1420;
   border:1px solid #24344b;color:#e8eef7;font:inherit;font-size:13px;
   margin-right:8px;min-width:200px}
@@ -226,7 +227,7 @@ font-weight:800;cursor:pointer;font:inherit;box-shadow:0 4px 14px rgba(124,92,25
   <div id="main"></div>
 </div>
 <script>
-const ENC={salt:"YnAc/D0Noxgi+vrsmgbkNQ==",iv:"8q8DwQHjvLeXGzZF",ct:"HPJPYNoAEcDyt3UcK4Lmku8AeNyFgSryP6b/7/M/kMDPhTZQSjVmkyNtHBGo/SN2HPTTBsheSbs7OcuzEw8vpwMtOMa/VrcrmJ05hhwWTQ1WLqcIhpKJWeT0/U2NEoytVpRnoAMHM+Uuhj4079cg/0739q1Zs6zuCjHHgjphbNGNjeaoNHnXU5gzuv8fDv1zla5M9lHHhzhji3QWt5aix5rh+ypQ7BuZe6XjniSQfzQjEv0ZFsYEwrLDfkwcBBzfPH9lWuEV/j26jF3De+v4wt+xpMl++HzbEIzZd6Xt3+UThg2inXMPY0S2NfGwwSzjUe+qrWOHI0hKBwAtZU3+nnHj/k8Yl+qaJD7jpREqToF5zyNOnklhaq9GA0dN8VfLfH+Fj9sfv0iqEn00KdoflmvLGzXduvSQcBnQV5+v/19qxJXuWr4AuRkM9tzvrGMrnUs2X7Z9XspI/Ex9Zmdz5kcP2K/7s8KMhjvIYEM3hrjUU0gbwRk8wD7OT7nMIw2Xi/62xLbhcRJxorpk2DZP1ssSF6K85mY1vm2JS06/F4BedtD2e8qw9AR5/KfiTQF3foULmRQd8lZJT+X2HPpmmkEjB49c2NndH8HPv5+GDm1TnrwzfTXhTTCWGyFiRJ+NmJ6R1tYfLyHIB/Phef4NnCber6jKUZPLxXKrD1y5cvZRboCCBvxZIbdvawvqoXwvwx4DWyy+dgiNmDPHAHsyB+xzFcaWQIw=",iter:310000};
+const ENC={salt:"R8G855Jl3RCQhRzcA7OMEQ==",iv:"6zdyRp1MiqQuG0gJ",ct:"xiE/GXR55DNtnHf73LY1cyOR1TSCaMOTyTa7DwCyXzQnYohPaOFhe6adVUocJrssS3YOlfSHtFDCcexktYuiMscAM6yPqABoQ+3zLvdakwcDC7iWr8H8qw8goZVx92JK0DvGu4G5Um8eybDtjHNSIWGMjzkG2GipOwv2oZD2pSWi8clGgyUSbdoyxZFnPhrxAsIdKy/6ngTbPB6R7zkhyAGX7Ba7K8LyNw8IEk8QmdrTkIq6xPIb38ShRPVmLzHnm4HfHLgdP8WnLEZcW5qZPviaTU7bKjTDvz0bx7f7hHba3ZOhoJFoD4PneiZ9YSRhCOsmmIVYSUg2H5inqVhiOsx9xRm8LaiAk74Mo4R4IEYLHl+E4o69Ofyd4rHtmxz54HxKzF24pbQAISoW1WDQkzvOAzKwHCVNfb2qofPKxiq6x5e7Az5SCnaqwuLBaEoai8u+9HsbTm5wWZ3mKwqr9Z2Rx0FFzOe6yWqG8q3+8BBQh47nO6mofwd/C0zTa7znwXm6+C/tKdn2uU19nA5aW9IIVBvBj/Bxqmdutw6oR/hB6t4ippWrVcpp+GpCnz8k46CzrDeE0l2J4U5YYIWoyKWfrHZNNyRjzAq0DmOKV07z1SwpT0b1guI8W44oHvtNLsHipB0IhJjJowu5NSpTeML1p0eEoILGMoO7oxgSWjm/mvXL71MV/agGdIA0+dQNEEZPov9Skfb5QJdEcDrAi17QH3R/2Ig=",iter:310000};
 let DATA=null,LIVE=null,liveOk=false,lastSig='',tab='team';
 let selHale=null,selNpc=null;
 const BLOBS={};
@@ -535,7 +536,7 @@ function squadsBlock(){
   if(!SQ)return`<div class="muster"><h2>Squads</h2><p class="muted">`
     +(sqErr?esc(sqErr):'Reading the muster roll…')+`</p></div>`;
   const cards=(SQ.squads||[]).map(squadCard).join('')
-    ||`<p class="muted">No squads yet. Form one below, then post people to it —
+    ||`<p class="muted">No squads yet. Name one above, then post people to it —
        or pick <b>+ New squad…</b> straight from any NPC's Posting dropdown,
        which does both at once.</p>`;
   return `<div class="muster">
@@ -546,35 +547,26 @@ function squadsBlock(){
     <label class="whorow">Your player name
       <input id="sq-who" type="text" value="${esc(savedWho())}"
              placeholder="so the log knows who gave the order"></label>
-    ${sqErr?'<div class="err">'+esc(sqErr)+'</div>':''}
-    ${cards}
     <div class="mkrow">
-      <button class="linkbtn" id="sq-open">+ Form a squad</button>
-      <span id="sq-mk" style="display:none">
-        <input id="sq-name" type="text" placeholder="e.g. The Salt Line">
-        <button class="gbtn" id="sq-make">Form it</button>
-        <button class="linkbtn" id="sq-cancel">cancel</button>
-      </span>
-      <p class="hint">An empty squad is fine — post people to it from its own
-      list, or from any NPC's Posting dropdown.</p>
-    </div></div>`;
+      <input id="sq-name" type="text" placeholder="Name a new squad — e.g. The Salt Line">
+      <button class="gbtn" id="sq-make">Form a squad</button>
+      <p class="hint">An empty squad is fine. Post people to it from its own
+      list below, or from any NPC's Posting dropdown.</p>
+    </div>
+    ${sqErr?'<div class="err">'+esc(sqErr)+'</div>':''}
+    ${cards}</div>`;
 }
 function wireSquads(m){
   if(!(DATA.squads&&SQ))return;
   m.querySelectorAll('.squad').forEach(wireSquad);
-  const open=m.querySelector('#sq-open'), box=m.querySelector('#sq-mk');
-  if(open)open.onclick=()=>{
-    box.style.display='';open.style.display='none';
-    m.querySelector('#sq-name').focus();
+  const name=m.querySelector('#sq-name'), make=m.querySelector('#sq-make');
+  const form=()=>{
+    const n=(name||{}).value||'';
+    if(!n.trim()){sqErr='Name the squad first.';render();return}
+    sqCall('/api/team/squad',{action:'create',name:n,player:sqWho()});
   };
-  const cancel=m.querySelector('#sq-cancel');
-  if(cancel)cancel.onclick=()=>{box.style.display='none';open.style.display=''};
-  const make=m.querySelector('#sq-make');
-  if(make)make.onclick=()=>{
-    const n=(m.querySelector('#sq-name')||{}).value||'';
-    if(n.trim())sqCall('/api/team/squad',
-      {action:'create',name:n,player:sqWho()});
-  };
+  if(make)make.onclick=form;
+  if(name)name.addEventListener('keydown',e=>{if(e.key==='Enter')form()});
 }
 /* ---- base map geometry (ring fallback = the bot's base_map_view math) ---- */
 function haleXY(h,i,n,cv){
