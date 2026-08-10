@@ -236,7 +236,7 @@ font-weight:800;cursor:pointer;font:inherit;box-shadow:0 4px 14px rgba(124,92,25
   <div id="main"></div>
 </div>
 <script>
-const ENC={salt:"ikK67ddxnPbyDFaSNgAVgA==",iv:"tRIHjhjFYOJVI8Or",ct:"ACF/GQxkKHEK1+2GSXSGfeAdKmP3YxpZecvmav/ZAJl7fgqWqZWU44pN8c+EVijqzRcUdKxykTvNHh2GunYVcXfuzAJAlyXJyWpUOb0ivWliwdUzDuXI74E2/zoYO8WsH3Tvw5IHhfrwE4fGWwYNrF3oAMcGmWwmb32ldtZQfBilAXQsQ414ZbmiSOBYeKaSfAHUSN1Du3AVSxiJrQADJ2x9k+Xa+ZpnK071zJfPdpr33mKFlFtDHfrlihLFbsZoXUT+vGZ+KhIBZtJEorYTcVZPMYoDV9E6nqQWadeUYAm2/ggI7C3oPdAnF1a3x7FatR7VaYAHSgVToZNjWeQbPDIjMsepFVzGu1NmHKjjT0/zDC3Pp78f8xMxG1YxWC8a1TNAYlDLrvjiyUGhafi7r/w4SZYhZS8RIzizaBvjC/Kswj3hzy/bcBEVg81YSkzylsK3gFwyKnhtO+vEslai62tIHrFgV6WQo1CUdTth0rZdw9D2jTlknQ4H33x4pFfn7QIFMaYf7GU+73TK0Jrm6dB7/dtpcyfiI4uA6WSsgW3RJjTf3x+ECkMh5TYF1imXjk16ORGN16Mx/mQTEWvK10O1NsemPk+GZEnOuqhBYo4U9CpqZ4uEbpehh4D81lCa1nkpCn1qlFE6eLG3Lw8CnnZWJ/nmmgxDZJ1VXXe/QZTcwxrH3dGnNjmW55kX8PHxE2U1Oi3KZW1h5aKqjaB/KSL5bOIDLRc=",iter:310000};
+const ENC={salt:"+H1XfvzaO10g5p/9C2Smzg==",iv:"+ukoOk11EoQrY0P1",ct:"rXihgnhWDYbKTj/YCMs2cOBDyDs6y7EXViKXWwEM332oo5ogzp2KXcemBzbR6C/934V5ch5w0GOpwT2uv7wk9RGgggjueWR0pWJ6y88sly2bHMC3sx/PvSJi2B4ND00HQ5FJeBAQKfQk4+IAKrAjMMYifLmc/Ja2XTKKzl6RVooP95DolqZwLqzJBzeLNItWIT+B9/B/9kyYwVVef17bObRBxxb2RZcS2cffnGvpRU5kxhmVMcos3xjTDrbYD05ImFA0UzLNmvcHdsiHAGQJCHLFLGGFdUUroGv+FgABFeNrBVqsoMsG3YLaohvc+DkhzpNglo2UKM8X9JrjeE/2FynudXCvH3B31LXpURKheu4LtrdCUzNUTOjYbuXH2+DhPxy3EIoSpQDwPuzz9mbNU0qwWTp1grNaXSREyLNL5SZUODVDlDnEd7t31/AIO3FLEJFIZh5LlPtZTndsFHJxReKcsovERWAOI8F+uQTsXv0SD2o0fPsDXk0bK0Rhfl/51ej813+I7rLEK/uNKxH4OPnd/WHVh5m8evRq2ZtfxvrmMp77uN4idkq1ari1yJYl+1ixcRtCEvHIv1n7SfPLJTW5cAVGD+6BE0T6Z2bHxUvSYJSRRNvljm9s/jvFpwhsx5iQMzKEv89ahH7SAbHAAyWoZ8tFgqZhmxGFxJOkYBwZ7B0irNSoAHVWz13Q68yPRMWwiZUpAl5fFM2CazGyB5YOv+aMqYkYG8bfQKzWMhbjqdqNnlZmNG4I3ZIoo6E8up6hyykGVAQFnlA5ibVCWDE85TntuofXEJ8hZftR7fQsLCaAZs5CYELX+ESFppbHaT+ULHbHN3Bvrs5JxIOxAC+V2fBh9plATzUuw0sZtaYrTDKEBa4H4ZZ5QAKP1thv2atyZc9mbHNmIFBu62pntKdUKsDHxU59TgalZHsUajdclvCbL659+74g084I9+7AZ1C+deA4V+BvW2PuAYHan1PWbFTQGhjwfl613/Z/YDwiXnKUv8oJ+ETMTTaUC0yfrTdv13zWZNsh7z7g8Jrxogf1NI+jYK1tTfsWI8+HZs1+2OlKLouPDA==",iter:310000};
 let DATA=null,LIVE=null,liveOk=false,lastSig='',tab='team';
 let selHale=null,selNpc=null;
 const BLOBS={};
@@ -813,21 +813,40 @@ function forgeForm(){
       (F.tiers||[]).indexOf(j.tier)<=(F.tiers||[]).indexOf(r));
   const rows=fields.map(f=>{
     if(f==='job'){
+      // "common+", not "common". A job's tier is the LOWEST card that may take
+      // it, never a ceiling on what you get — but the bare word read as a
+      // verdict on the NPC you were about to forge. Velvet asked (2026-08-09)
+      // for Squadron Member to be "both common and uncommon as the same role",
+      // which it already was: she was reading "Squadron Member — common" while
+      // holding an uncommon card and concluding it would forge a common one.
+      // The card sets the HP band and how much of the character you write; the
+      // job only sets where in that band they land.
       const opts=jobs.map(j=>`<option value="${esc(j.title)}">${esc(j.title)}`
-        +` — ${esc(j.tier)}${j.left!==null&&j.left!==undefined?' ('+j.left+' left)':''}`
+        +` — ${esc(j.tier)}+${j.left!==null&&j.left!==undefined?' ('+j.left+' left)':''}`
         +`</option>`).join('');
       // Writing a job is the last entry in the same dropdown you pick one
       // from, not a form elsewhere on the page.
       return `<label>${esc((F.prompts||{}).job||'Job')}
         <select id="f-job" onchange="jobPick()">${opts||'<option value="">no posts open</option>'}
         <option value="+">+ Add a job…</option></select></label>
+        <p class="hint">Every post here takes the <b>${esc(r)}</b> card you are
+        spending — the tier beside a job is the <i>lowest</i> card it accepts,
+        not what you will get. Spend a better card on the same job and you get
+        a better character in it: the card sets their strength and how much of
+        them you write, the job only sets where in that band they land.</p>
         <div id="j-new" style="display:none">
           <label>Job title<input id="j-title" type="text" placeholder="e.g. Reef Warden"></label>
           <label>What does the job actually do?<textarea id="j-desc" rows="3"
             placeholder="A sentence or two — enough for a dev to tier it fairly."></textarea></label>
+          <label>Which tier are you asking for?
+            <select id="j-tier"><option value="">choose…</option>
+            ${(F.tiers||[]).map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('')}
+            </select></label>
           <button class="gbtn" id="j-send" onclick="jobSend()">Propose it</button>
           <button class="linkbtn" onclick="jobPick(true)">cancel</button>
-          <p class="hint">A dev decides which card rarity may hire it and how
+          <p class="hint">The tier is what decides which cards may hire the job:
+          a card can take a job of its own tier or below, so the higher you ask,
+          the rarer the card it takes. A dev has the final say on that and on how
           many can exist. Once they've ruled it's in this dropdown for good —
           it can't be used on the card you're forging right now.</p>
           <div class="err" id="j-err"></div>
@@ -894,15 +913,22 @@ async function fileB64(el){
 }
 async function jobSend(){
   const err=document.getElementById('j-err'), btn=document.getElementById('j-send');
+  const tier=(document.getElementById('j-tier')||{}).value||'';
+  // Asked for here rather than left to the devs to guess, because a player who
+  // isn't given the field writes it into the title instead.
+  if(!tier){err.className='err';
+            err.textContent='Say which tier the job should be.';return}
   btn.disabled=true;btn.textContent='Sending…';
   try{
     await api('/api/team/job-propose',{
       title:(document.getElementById('j-title')||{}).value||'',
       description:(document.getElementById('j-desc')||{}).value||'',
+      tier:tier,
       player:(document.getElementById('f-player')||{}).value||''});
     err.className='ok';
-    err.textContent='Sent. A dev will tier it, and then it joins the list.';
+    err.textContent='Sent. A dev rules on the tier, and then it joins the list.';
     ['j-title','j-desc'].forEach(i=>{const e=document.getElementById(i);if(e)e.value=''});
+    const ts=document.getElementById('j-tier');if(ts)ts.selectedIndex=0;
     jobPick(true);
   }catch(e){err.className='err';err.textContent=e.message}
   btn.disabled=false;btn.textContent='Propose it';
