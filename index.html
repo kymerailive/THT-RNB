@@ -114,6 +114,51 @@ font-weight:800;cursor:pointer;font:inherit;box-shadow:0 4px 14px rgba(124,92,25
 .npcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
 .npcgrid .pcard{margin:0}
 
+/* ================= PHONES =================
+   Owner ruling: every player-facing site has to work on a phone, not just the
+   dev dashboard. This file had ZERO media queries. Most of the layout is
+   already fluid — max-width, auto-fill grids, flex-wrap — so what was actually
+   broken is narrower than it looks: the gutters, the tables, and the touch
+   targets on the base map, which is the one place a player moves an NPC.
+
+   The breakpoint is 720px rather than a device width: that is where the
+   40px of side padding plus a table of four columns stops fitting. */
+@media (max-width:720px){
+  #app{padding:0 12px 90px}
+  header.top{margin:0 -12px;padding:10px 12px;gap:7px}
+  .updated{margin-left:0;flex:1 1 100%;font-size:.74rem}
+  h1{font-size:1.45rem}
+  /* Tables carry six columns on the roster and squad views. They scroll
+     inside their own box so the PAGE never scrolls sideways. */
+  .tscroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tscroll table{min-width:520px}
+  .stat{display:block;margin:8px 0;padding:12px 16px}
+  .basedesc{max-width:none}
+  .npcgrid{grid-template-columns:1fr}
+  .npcprof-head{flex-wrap:wrap}
+  .moverow{flex-wrap:wrap}
+  .moverow select{flex:1 1 100%}
+  /* 44px touch minimum. A tab pill was 33px and the hale boxes on the base
+     map are what a player taps to move somebody. */
+  .tabbtn{padding:11px 18px;min-height:44px}
+  .gbtn,.moverow select,.gatecard button,.gatecard input{min-height:44px}
+  /* 16px stops iOS zooming the page the moment the passcode field is
+     focused — on the gate, that is the first thing anyone touches. */
+  .gatecard input,.moverow select,input,select,textarea{font-size:16px}
+  .bhale .hbox{width:44px;height:44px;position:relative}
+  /* The NPC dots stay small so a hale with six of them still reads, but the
+     touchable area around each is the full 44px. This is the one place a
+     PLAYER moves somebody, so it has to answer a thumb. */
+  .bnpc{width:26px;height:26px;font-size:9.5px}
+  .bnpc::before{content:"";position:absolute;left:50%;top:50%;width:44px;
+    height:44px;border-radius:50%;transform:translate(-50%,-50%)}
+  .gatecard{padding:30px 20px}
+  th,td{padding:8px 9px}
+}
+@media (max-width:420px){
+  .tabbtn{flex:1 1 auto;text-align:center}
+}
+
 /* ---- NPC detail: blurb, health, abilities ---- */
 .npcblurb{margin:10px 0 2px;font-size:14px;line-height:1.55;color:#c7d4e6}
 .forgeline{margin-top:2px}
@@ -236,7 +281,7 @@ font-weight:800;cursor:pointer;font:inherit;box-shadow:0 4px 14px rgba(124,92,25
   <div id="main"></div>
 </div>
 <script>
-const ENC={salt:"+H1XfvzaO10g5p/9C2Smzg==",iv:"+ukoOk11EoQrY0P1",ct:"rXihgnhWDYbKTj/YCMs2cOBDyDs6y7EXViKXWwEM332oo5ogzp2KXcemBzbR6C/934V5ch5w0GOpwT2uv7wk9RGgggjueWR0pWJ6y88sly2bHMC3sx/PvSJi2B4ND00HQ5FJeBAQKfQk4+IAKrAjMMYifLmc/Ja2XTKKzl6RVooP95DolqZwLqzJBzeLNItWIT+B9/B/9kyYwVVef17bObRBxxb2RZcS2cffnGvpRU5kxhmVMcos3xjTDrbYD05ImFA0UzLNmvcHdsiHAGQJCHLFLGGFdUUroGv+FgABFeNrBVqsoMsG3YLaohvc+DkhzpNglo2UKM8X9JrjeE/2FynudXCvH3B31LXpURKheu4LtrdCUzNUTOjYbuXH2+DhPxy3EIoSpQDwPuzz9mbNU0qwWTp1grNaXSREyLNL5SZUODVDlDnEd7t31/AIO3FLEJFIZh5LlPtZTndsFHJxReKcsovERWAOI8F+uQTsXv0SD2o0fPsDXk0bK0Rhfl/51ej813+I7rLEK/uNKxH4OPnd/WHVh5m8evRq2ZtfxvrmMp77uN4idkq1ari1yJYl+1ixcRtCEvHIv1n7SfPLJTW5cAVGD+6BE0T6Z2bHxUvSYJSRRNvljm9s/jvFpwhsx5iQMzKEv89ahH7SAbHAAyWoZ8tFgqZhmxGFxJOkYBwZ7B0irNSoAHVWz13Q68yPRMWwiZUpAl5fFM2CazGyB5YOv+aMqYkYG8bfQKzWMhbjqdqNnlZmNG4I3ZIoo6E8up6hyykGVAQFnlA5ibVCWDE85TntuofXEJ8hZftR7fQsLCaAZs5CYELX+ESFppbHaT+ULHbHN3Bvrs5JxIOxAC+V2fBh9plATzUuw0sZtaYrTDKEBa4H4ZZ5QAKP1thv2atyZc9mbHNmIFBu62pntKdUKsDHxU59TgalZHsUajdclvCbL659+74g084I9+7AZ1C+deA4V+BvW2PuAYHan1PWbFTQGhjwfl613/Z/YDwiXnKUv8oJ+ETMTTaUC0yfrTdv13zWZNsh7z7g8Jrxogf1NI+jYK1tTfsWI8+HZs1+2OlKLouPDA==",iter:310000};
+const ENC={salt:"pY65lw2oZSHb4t8Wgtnm5Q==",iv:"NeJ0WxMkcDkP/IxJ",ct:"dKiQl9dyp/4OB2Ctz9kv5XSir6ZWSaNvOqUgYijtZEkCrhmGuf757BF118F9kRjViJ+BrvLxeuA0aYGrBWO7LCr1dPNqLkx/KKRyGZV2NlTiwvwM5wFFbyI29/NsOMyGXjaJ5GcglFG7Lv+fQK1glvj7dAonUDvzrWG/Epgk5ZBsFFzmZwUqsNnDUTuQY1ds+HNOFhKEN6bpoKsGy4Yekzg8xsyJYfvviLIRED38mdKobCFfo/f4129svedBJWoDLJ5bOE1dURV6xVMquLbKBgRlRxJmm/oemqzE+CSHDOYjlO8S1llWH8s9jDN2yfsN0HeYyNPOLv5W92m8HohY32Y/s1i0t/RevDH3siWUdeSbFLVWGxKWbFzK6EuApIoogtK/N4IuIzlI5AtVIXtM6DMBA8FvjRLlIgqsuezfKDytnQYvVZIMvTG8SBd/zYGbK6xUlodNtCz7ZDAKGetYucGiztTbGNgMZvYX1aI7WmVgb7xCQ90VsAEHc+ieDK9AR8BP9a7UUvuglm8ZlnJ7ugEyc7veZg0fP0kVn60IEmbE9TKpodj5A/jZJ0RkbiAhzfz5Z8a08B4NsZzCDJ4wKTvTIlrFz9mX8ee8f4N9IQ0K9XYoxJUgHjKnsVDndTHf/cL2JOfoFMtc4OhLLgPfaj+D7pf8e9OIonTXBAZgZr/JTGJyIELf8RmrbkARIhB53+52KNnWA1oswLiuG4XSfZ5Yn/wg7ZIbAWcbFY5Q2Jw2is2LngC5FezjhrZh/hjgwcR7s1wJ0TfDwG84I+/ZbZAEPkIOqaTPCS+PWKlQ63xzlzAC1MR6MDfUlRPnU9nm7kElVBBSZEnQlY8BxarBlnn9eTiwfBl3IhmDGqekribX+83crCv9+lE44cqFmWyl1feRsl7CnwBSlH8D1pS8LBrCG4hbyY60B12iyVH1q53B2eGe4L9UzpU9IqONoe5wQobzkQ+Qfz9Tn4UhlTnoS3OuxEKDfKT9oh19WfjZbSy4fbRFFPvg1249UyQFUlhNdmuE5/BFBvKm6GPxawerP69qxtQpYqlc6BS+pv7Mhk4iu667B4xk5Q==",iter:310000};
 let DATA=null,LIVE=null,liveOk=false,lastSig='',tab='team';
 let selHale=null,selNpc=null;
 const BLOBS={};
@@ -453,7 +498,7 @@ function squadCard(s){
   const rows=(s.members||[]).map(m=>`<tr data-npc="${esc(m.key)}">
     <td><b>${esc(m.name)}</b>${m.job?'<div class="muted fsm">'+esc(m.job)+'</div>':''}</td>
     <td><select class="sq-role">${roleOptions(m.role)}</select></td>
-    <td class="muted">${m.hp?esc(m.hp)+' HP':''}</td>
+    <td class="muted">${m.hp?esc(m.hp)+' max HP':''}</td>
     <td><button class="linkbtn sq-drop">remove</button></td></tr>`).join('')
     ||'<tr><td colspan="4" class="muted">Nobody posted to this squad yet.</td></tr>';
   const free=(SQ.unassigned||[]).map(n=>
@@ -495,7 +540,7 @@ function squadCard(s){
         <div class="pmeta">${status}</div>
       </div>
     </div>
-    <table class="sqtab"><tbody>${rows}</tbody></table>
+    <div class="tscroll"><table class="sqtab"><tbody>${rows}</tbody></table></div>
     <div class="sqadd">
       <select class="sq-new">${free||'<option value="">everyone is posted</option>'}</select>
       <button class="linkbtn sq-add">post to squad</button></div>
@@ -647,7 +692,7 @@ function npcCard(c,withMove){
     '<li><b>'+esc(a.name)+'</b>'+(a.damage?' <span class="dmg">'+esc(a.damage)+'</span>':'')
     +(a.desc?'<br><span class="muted">'+esc(a.desc)+'</span>':'')+'</li>').join('');
   const vitals=(c.hp||abil)?`<div class="vitals">
-    ${c.hp?'<div class="hp"><span class="k">Health</span><b>'+c.hp+'</b></div>':''}
+    ${c.hp?'<div class="hp"><span class="k">Constitution</span><b>'+c.hp+'</b></div>':''}
     ${abil?'<div class="abils"><span class="k">Abilities</span><ul>'+abil+'</ul></div>':''}
     </div>`:'';
   const inSquad=DATA.squads&&SQ&&liveOk&&!!squadOf(c.key);
@@ -757,10 +802,10 @@ function render(){
       <div><span class="stat goldv"><div class="v">${money(DATA.treasury)}</div><div class="k">Team Bank</div></span>
       <span class="stat"><div class="v">${DATA.players.length}</div><div class="k">Players</div></span>
       <span class="stat"><div class="v">${DATA.stash.length}</div><div class="k">Stash items</div></span></div>
-      <h2>Roster</h2><table><thead><tr><th>Name</th><th>Pronouns</th><th>Label</th><th>Titles</th></tr></thead>
-      <tbody>${roster}</tbody></table>
-      <h2>Team stash</h2><table><thead><tr><th>Item</th><th>Qty</th><th>About</th></tr></thead>
-      <tbody>${stash}</tbody></table>`;
+      <h2>Roster</h2><div class="tscroll"><table><thead><tr><th>Name</th><th>Pronouns</th><th>Label</th><th>Titles</th></tr></thead>
+      <tbody>${roster}</tbody></table></div>
+      <h2>Team stash</h2><div class="tscroll"><table><thead><tr><th>Item</th><th>Qty</th><th>About</th></tr></thead>
+      <tbody>${stash}</tbody></table></div>`;
   }else if(tab==='base'){
     renderBase(m);
   }else if(tab==='npcs'){
@@ -794,7 +839,7 @@ function render(){
         ${p.affiliation?' · '+esc(p.affiliation):''}
         ${(p.titles||[]).length?' · '+esc(p.titles.join(', ')):''}</div>
         <div class="pmeta">💰 ${money(p.wallet)}${sk?' · 🎓 '+esc(sk):''}</div>
-        <table><thead><tr><th>Item</th><th>Qty</th><th>About</th></tr></thead><tbody>${inv}</tbody></table>
+        <div class="tscroll"><table><thead><tr><th>Item</th><th>Qty</th><th>About</th></tr></thead><tbody>${inv}</tbody></table></div>
         </div>`;}).join('');
   }
 }
